@@ -5,10 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.loginpage.domain.use_case.ValidateEmail
 import com.example.loginpage.domain.use_case.ValidatePassword
 import com.example.loginpage.domain.use_case.ValidateRepeatedPassword
 import com.example.loginpage.domain.use_case.ValidateTerms
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val validateEmail: ValidateEmail = ValidateEmail(),
@@ -17,6 +21,9 @@ class MainViewModel(
     private val validateTerms: ValidateTerms = ValidateTerms()
 ): ViewModel() {
     var state by mutableStateOf(LoginFormState())
+
+    private val validationEventChannel = Channel<ValidationEvent>()
+    val valudationEvents = validationEventChannel.receiveAsFlow()
 
     fun onEvent(event: LoginFormEvent) {
         when(event){
@@ -60,6 +67,13 @@ class MainViewModel(
             )
             return
         }
+        viewModelScope.launch {
+            validationEventChannel.send(ValidationEvent.Success)
+        }
+    }
+
+    sealed class ValidationEvent{
+        object Success: ValidationEvent()
     }
 
 }
