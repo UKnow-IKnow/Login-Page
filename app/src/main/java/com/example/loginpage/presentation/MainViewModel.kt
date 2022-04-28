@@ -1,5 +1,6 @@
 package com.example.loginpage.presentation
 
+import android.os.AsyncTask.execute
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -17,5 +18,48 @@ class MainViewModel(
 ): ViewModel() {
     var state by mutableStateOf(LoginFormState())
 
+    fun onEvent(event: LoginFormEvent) {
+        when(event){
+            is LoginFormEvent.EmailChanged ->{
+                state = state.copy(email = event.email)
+            }
+            is LoginFormEvent.PasswordChanged ->{
+                state = state.copy(password = event.password)
+            }
+            is LoginFormEvent.RepeatedPasswordChanged ->{
+                state = state.copy(repeatedPassword = event.repeatedPassword)
+            }
+            is LoginFormEvent.AcceptTerms ->{
+                state = state.copy(acceptedTerms = event.isAccepted)
+            }
+            is LoginFormEvent.Submit->{
+                subMitData()
+            }
+        }
+    }
+
+    private fun subMitData() {
+        val emailResult = validateEmail.execute(state.email)
+        val passwordResult = validatePassword.execute(state.password)
+        val repeatedPasswordResult = validateRepeatedPassword.execute(state.password, state.repeatedPassword)
+        val termsResult = validateTerms.execute(state.acceptedTerms)
+
+        val hasError = listOf(
+            emailResult,
+            passwordResult,
+            repeatedPasswordResult,
+            termsResult
+        ).any { !it.success }
+
+        if(hasError){
+            state = state.copy(
+                emailError = emailResult.errorMessage,
+                passwordError = passwordResult.errorMessage,
+                repeatedPasswordError = repeatedPasswordResult.errorMessage,
+                termError = termsResult.errorMessage
+            )
+            return
+        }
+    }
 
 }
