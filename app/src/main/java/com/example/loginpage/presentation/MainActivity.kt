@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshots.SnapshotApplyResult
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -71,7 +72,8 @@ class MainActivity : ComponentActivity() {
                         if (state.emailError != null) {
                             Text(
                                 text = state.emailError,
-                                color = MaterialTheme.colors.error
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.End)
                             )
                         }
                         Spacer(modifier = Modifier.height(16.dp))
@@ -94,7 +96,8 @@ class MainActivity : ComponentActivity() {
                         if (state.passwordError != null) {
                             Text(
                                 text = state.passwordError,
-                                color = MaterialTheme.colors.error
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.End)
                             )
                         }
                         Spacer(modifier = Modifier.height(16.dp))
@@ -117,7 +120,8 @@ class MainActivity : ComponentActivity() {
                         if (state.repeatedPasswordError != null) {
                             Text(
                                 text = state.repeatedPassword,
-                                color = MaterialTheme.colors.error
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.End)
                             )
                         }
                         Spacer(modifier = Modifier.height(16.dp))
@@ -134,7 +138,20 @@ class MainActivity : ComponentActivity() {
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = "Accepted Terms")
                         }
+                        if(state.termError != null){
+                            Text(
+                                text = state.termError,
+                                color = MaterialTheme.colors.error
+                            )
+                        }
 
+                        Button(onClick = {
+                            viewModel.onEvent(LoginFormEvent.Submit)
+                        },
+                            modifier = Modifier.align(Alignment.End)
+                        ) {
+                            Text(text = "Submit")
+                        }
                     }
                 }
             }
