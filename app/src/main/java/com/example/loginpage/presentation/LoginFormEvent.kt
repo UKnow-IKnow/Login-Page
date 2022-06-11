@@ -6,5 +6,5 @@ sealed class LoginFormEvent {
     data class RepeatedPasswordChanged(val repeatedPassword: String) : LoginFormEvent()
     data class AcceptTerms(val isAccepted: Boolean) : LoginFormEvent()
 
-    object Submit: LoginFormEvent()
+    object Submit : LoginFormEvent()
 }

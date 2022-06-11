@@ -1,7 +1,7 @@
 package com.example.loginpage.domain.use_case
 
 class ValidateRepeatedPassword {
-    fun execute(password: String, repeatedpassword:String): ValidateResult {
+    fun execute(password: String, repeatedpassword: String): ValidateResult {
 
         if (password != repeatedpassword) {
             return ValidateResult(

@@ -10,7 +10,8 @@ class ValidatePassword {
                 errorMessage = "Password need to 8 character"
             )
         }
-        val containCharacterAndDigits = password.any { it.isDigit() } && password.all { it.isLetter() }
+        val containCharacterAndDigits =
+            password.any { it.isDigit() } && password.all { it.isLetter() }
         if (!containCharacterAndDigits) {
             return ValidateResult(
                 success = false,

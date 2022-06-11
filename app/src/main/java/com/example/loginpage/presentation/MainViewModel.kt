@@ -19,27 +19,27 @@ class MainViewModel(
     private val validatePassword: ValidatePassword = ValidatePassword(),
     private val validateRepeatedPassword: ValidateRepeatedPassword = ValidateRepeatedPassword(),
     private val validateTerms: ValidateTerms = ValidateTerms()
-): ViewModel() {
+) : ViewModel() {
     var state by mutableStateOf(LoginFormState())
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val valudationEvents = validationEventChannel.receiveAsFlow()
 
     fun onEvent(event: LoginFormEvent) {
-        when(event){
-            is LoginFormEvent.EmailChanged ->{
+        when (event) {
+            is LoginFormEvent.EmailChanged -> {
                 state = state.copy(email = event.email)
             }
-            is LoginFormEvent.PasswordChanged ->{
+            is LoginFormEvent.PasswordChanged -> {
                 state = state.copy(password = event.password)
             }
-            is LoginFormEvent.RepeatedPasswordChanged ->{
+            is LoginFormEvent.RepeatedPasswordChanged -> {
                 state = state.copy(repeatedPassword = event.repeatedPassword)
             }
-            is LoginFormEvent.AcceptTerms ->{
+            is LoginFormEvent.AcceptTerms -> {
                 state = state.copy(acceptedTerms = event.isAccepted)
             }
-            is LoginFormEvent.Submit->{
+            is LoginFormEvent.Submit -> {
                 subMitData()
             }
         }
@@ -48,7 +48,8 @@ class MainViewModel(
     private fun subMitData() {
         val emailResult = validateEmail.execute(state.email)
         val passwordResult = validatePassword.execute(state.password)
-        val repeatedPasswordResult = validateRepeatedPassword.execute(state.password, state.repeatedPassword)
+        val repeatedPasswordResult =
+            validateRepeatedPassword.execute(state.password, state.repeatedPassword)
         val termsResult = validateTerms.execute(state.acceptedTerms)
 
         val hasError = listOf(
@@ -58,7 +59,7 @@ class MainViewModel(
             termsResult
         ).any { !it.success }
 
-        if(hasError){
+        if (hasError) {
             state = state.copy(
                 emailError = emailResult.errorMessage,
                 passwordError = passwordResult.errorMessage,
@@ -72,8 +73,8 @@ class MainViewModel(
         }
     }
 
-    sealed class ValidationEvent{
-        object Success: ValidationEvent()
+    sealed class ValidationEvent {
+        object Success : ValidationEvent()
     }
 
 }

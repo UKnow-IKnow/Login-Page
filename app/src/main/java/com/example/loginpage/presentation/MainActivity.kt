@@ -138,16 +138,17 @@ class MainActivity : ComponentActivity() {
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = "Accepted Terms")
                         }
-                        if(state.termError != null){
+                        if (state.termError != null) {
                             Text(
                                 text = state.termError,
                                 color = MaterialTheme.colors.error
                             )
                         }
 
-                        Button(onClick = {
-                            viewModel.onEvent(LoginFormEvent.Submit)
-                        },
+                        Button(
+                            onClick = {
+                                viewModel.onEvent(LoginFormEvent.Submit)
+                            },
                             modifier = Modifier.align(Alignment.End)
                         ) {
                             Text(text = "Submit")
